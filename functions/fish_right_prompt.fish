@@ -1,6 +1,7 @@
 function fish_right_prompt 
   set -l exit_code $status
   set -l cmd_duration $CMD_DURATION
+  set -l background_count (jobs | wc -l | tr -d ' ')
   __tmux_prompt
   if test $exit_code -ne 0
     set_color red
@@ -15,6 +16,10 @@ function fish_right_prompt
   end
   printf ' (%s)' (__print_duration $cmd_duration)
   set_color 666666
+  if [ $background_count -gt 0 ]
+    set_color purple
+    printf " ($background_count bg)"
+  end
   printf ' < %s' (date +%H:%M:%S)
   set_color normal
 end
